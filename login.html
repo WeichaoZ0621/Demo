@@ -127,19 +127,51 @@
   </div>
 
   <script>
-    function login() {
+    async function login() {
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
       var errorMessage = document.getElementById("error-message");
 
-      // 验证用户名和密码（例如 admin/123456）
-      if (username === "admin" && password === "123456") {
-        // 登录成功，保存状态
-        localStorage.setItem("isLoggedIn", "true");
-        // 跳转到简历页面
-        window.location.href = "index.html";
-      } else {
-        errorMessage.textContent = "用户名或密码错误";
+      // 清空之前的错误信息
+      errorMessage.textContent = "";
+
+      // 检查用户名和密码是否为空
+      if (!username || !password) {
+        errorMessage.textContent = "用户名和密码不能为空";
+        return;
+      }
+
+      // 使用 fetch 向后端发送请求
+      try {
+        const response = await fetch('http://8.137.101.41:5501/user/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userName: username,
+            passWord: password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          if (data.code === 200) {
+            // 登录成功，保存 token
+            localStorage.setItem("authToken", data.data.token);
+            // 跳转到简历页面
+            window.location.href = "index.html";
+          } else {
+            // 处理服务器返回的错误信息
+            errorMessage.textContent = data.msg || "登录失败";
+          }
+        } else {
+          // 其他非200的错误，显示错误信息
+          errorMessage.textContent = "服务器错误，请稍后再试";
+        }
+      } catch (error) {
+        errorMessage.textContent = "登录请求失败，请稍后再试";
       }
     }
   </script>
