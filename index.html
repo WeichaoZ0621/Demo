@@ -4,197 +4,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>就业服务</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <title>登录页面</title>
+  <style>
+    /* 设置背景 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: url('https://via.placeholder.com/1920x1080') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(52, 152, 219, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    }
+
+    /* 登录框样式 */
+    .login-container {
+      background: rgba(255, 255, 255, 0.9);
+      /* 半透明背景 */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      width: 300px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    /* 输入框样式 */
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-group label {
+      font-size: 14px;
+      color: #555;
+      font-weight: bold;
+    }
+
+    .input-group input {
+      width: 280px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-top: 5px;
+      transition: border 0.3s ease;
+    }
+
+    /* 输入框聚焦时的效果 */
+    .input-group input:focus {
+      border: 1px solid #3498db;
+      outline: none;
+    }
+
+    /* 登录按钮样式 */
+    .login-btn {
+      width: 100%;
+      padding: 10px;
+      background: #3498db;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    /* 鼠标悬停时按钮效果 */
+    .login-btn:hover {
+      background: #2980b9;
+    }
+
+    /* 错误信息样式 */
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* 动画效果 */
+    .login-container {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    /* 页面加载时渐变效果 */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="sidebar">
-    <div class="logo">
-      <img src="images/logo.png" alt="校徽" class="school-logo">
+
+  <div class="login-container">
+    <h2>用户登录</h2>
+    <div class="input-group">
+      <label for="username">用户名</label>
+      <input type="text" id="username" placeholder="请输入用户名">
     </div>
-    <ul class="nav-menu">
-      <li class="nav-item">
-        <a href="#" class="nav-link active" data-page="resume">
-          <i class="fas fa-edit"></i>
-          简历编辑
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link" data-page="templates">
-          <i class="fas fa-palette"></i>
-          XXXX
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link" data-page="history">
-          <i class="fas fa-history"></i>
-          XXXX
-        </a>
-      </li>
-    </ul>
-  </nav>
-
-  <main class="main-content">
-    <div class="content-wrapper">
-      <div class="input-section">
-        <form id="resumeForm">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="name"><i class="fas fa-user"></i> 姓名</label>
-              <input type="text" id="name" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="hometown"><i class="fas fa-map-marker-alt"></i> 籍贯</label>
-              <input type="text" id="hometown" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="birthdate"><i class="fas fa-birthday-cake"></i> 生日</label>
-              <div class="d-flex">
-                <input type="number" id="birthyear" class="form-control" placeholder="年" min="1900" max="2099" required>
-                年
-                <input type="number" id="birthmonth" class="form-control" placeholder="月" min="1" max="12" required>
-                月
-                <input type="number" id="birthday" class="form-control" placeholder="日" min="1" max="31" required>
-                日
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="phone"><i class="fas fa-phone"></i> 联系方式</label>
-              <input type="tel" id="phone" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="email"><i class="fas fa-envelope"></i> 邮箱</label>
-              <input type="email" id="email" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="wechat"><i class="fas fa-comment"></i> 微信号</label>
-              <input type="text" id="wechat" class="form-control" required>
-            </div>
-
-            <!-- 证件照上传 -->
-            <div class="form-group">
-              <label for="photo"><i class="fas fa-camera"></i> 证件照</label>
-              <input type="file" id="photo" class="form-control" accept="image/*" onchange="previewPhoto()">
-              <img id="photoPreview" src="" alt="证件照预览" style="max-width: 100px; margin-top: 10px; display: none;">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="education"><i class="fas fa-book-open"></i> 教育背景</label>
-            <div id="education-fields">
-              <div class="input-entry">
-                <input type="month" class="form-control" placeholder="起始年月" required>
-                <input type="month" class="form-control" placeholder="结束年月" required>
-                <input type="text" class="form-control" placeholder="学校" required>
-                <input type="text" class="form-control" placeholder="学院" required>
-                <input type="text" class="form-control" placeholder="专业" required>
-
-                <button type="button" class="remove-btn" onclick="removeInputEntry(this)">❌</button>
-
-                <div class="extra-info">
-                  <textarea class="form-control supplementary-info" rows="2" placeholder="绩点/主修科目等补充说明"></textarea>
-                </div>
-              </div>
-            </div>
-            <button type="button" class="add-btn" onclick="addEducationEntry()">+ 添加教育背景</button>
-          </div>
-
-          <div class="form-group">
-            <label for="experience"><i class="fas fa-school"></i> 校园经历</label>
-            <div id="experience-fields">
-              <div class="input-entry">
-                <input type="month" class="form-control" placeholder="起始年月" required>
-                <input type="month" class="form-control" placeholder="结束年月" required>
-                <input type="text" class="form-control" placeholder="部门/组织" required>
-                <input type="text" class="form-control" placeholder="任职" required>
-
-                <button type="button" class="remove-btn" onclick="removeInputEntry(this)">❌</button>
-
-                <div class="extra-info">
-                  <textarea class="form-control supplementary-info" rows="2" placeholder="校园经历的补充说明"></textarea>
-                </div>
-              </div>
-            </div>
-            <button type="button" class="add-btn" onclick="addExperienceEntry()">+ 添加校园经历</button>
-          </div>
-
-          <div class="form-group">
-            <label for="skills"><i class="fas fa-tools"></i> 实践经历</label>
-            <div id="skills-fields">
-              <div class="input-entry">
-                <input type="month" class="form-control" placeholder="起始年月" required>
-                <input type="month" class="form-control" placeholder="结束年月" required>
-                <input type="text" class="form-control" placeholder="实践项目" required>
-
-                <button type="button" class="remove-btn" onclick="removeInputEntry(this)">❌</button>
-
-                <div class="extra-info">
-                  <textarea class="form-control supplementary-info" rows="2" placeholder="实践经历的补充说明"></textarea>
-                </div>
-              </div>
-            </div>
-            <button type="button" class="add-btn" onclick="addSkillsEntry()">+ 添加实践经历</button>
-          </div>
-
-          <div class="form-group">
-            <label for="certificate"><i class="fas fa-scroll"></i>技能证书</label>
-            <div id="certificate-fields">
-              <div class="input-entry">
-                <div class="extra-info">
-                  <textarea class="form-control supplementary-info" rows="4" placeholder="关于技能证书的说明"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="action-buttons">
-            <button type="button" class="btn btn-primary" onclick="updatePreview()">
-              <i class="fas fa-arrow-rotate-right"></i> 更新简历
-            </button>
-            <button type="button" class="btn btn-export" onclick="exportPDF()">
-              <i class="fas fa-file-pdf"></i> 导出PDF
-            </button>
-            <button type="button" class="btn btn-clear" onclick="clearForm()">
-              <i class="fas fa-eraser"></i> 清空内容
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div class="side-preview">
-        <p>&lt;</p>
-        <p>&lt;</p>
-        <p>&lt;</p>
-        <p>展</p>
-        <p>开</p>
-        <p>简</p>
-        <p>历</p>
-        <p>预</p>
-        <p>览</p>
-        <p>&lt;</p>
-        <p>&lt;</p>
-        <p>&lt;</p>
-      </div>
-      <div class="preview-section">
-        <div class="resume-preview">
-          <div class="preview-header">
-            <h2><i class="fas fa-eye"></i> 简历预览</h2>
-          </div>
-          <div id="resumeContent"></div>
-        </div>
-      </div>
+    <div class="input-group">
+      <label for="password">密码</label>
+      <input type="password" id="password" placeholder="请输入密码">
     </div>
-  </main>
-  <!-- 其他内容 -->
-  <div class="bottom-scroll-container">
-    <div class="bottom-scroll-content"></div>
+    <button class="login-btn" onclick="login()">登录</button>
+    <p class="error" id="error-message"></p>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+    async function login() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      var errorMessage = document.getElementById("error-message");
+
+      // 清空之前的错误信息
+      errorMessage.textContent = "";
+
+      // 检查用户名和密码是否为空
+      if (!username || !password) {
+        errorMessage.textContent = "用户名和密码不能为空";
+        return;
+      }
+
+      // 使用 fetch 向后端发送请求
+      try {
+        const response = await fetch('http://8.137.101.41:5501/user/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userName: username,
+            passWord: password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          if (data.code === 200) {
+            // 登录成功，保存 token
+            localStorage.setItem("authToken", data.data.token);
+            // 跳转到简历页面
+            window.location.href = "main.html";
+          } else {
+            // 处理服务器返回的错误信息
+            errorMessage.textContent = data.msg || "登录失败";
+          }
+        } else {
+          // 其他非200的错误，显示错误信息
+          errorMessage.textContent = "服务器错误，请稍后再试";
+        }
+      } catch (error) {
+        errorMessage.textContent = "登录请求失败，请稍后再试";
+      }
+    }
+  </script>
+
 </body>
 
 </html>

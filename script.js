@@ -425,3 +425,185 @@ observer.observe(contentWrapper, {
   childList: true,
   subtree: true,
 });
+
+// 前后端交互
+// 收集表单数据
+function collectFormData() {
+  const formData = {};
+
+  // 基本信息
+  formData.name = document.getElementById('name').value;
+  formData.hometown = document.getElementById('hometown').value;
+  formData.birthyear = document.getElementById('birthyear').value;
+  formData.birthmonth = document.getElementById('birthmonth').value;
+  formData.birthday = document.getElementById('birthday').value;
+  formData.phone = document.getElementById('phone').value;
+  formData.email = document.getElementById('email').value;
+  formData.wechat = document.getElementById('wechat').value;
+
+  // 证件照
+  const photoPreview = document.getElementById('photoPreview');
+  if (photoPreview.src) {
+    formData.photo = photoPreview.src; // Base64 编码的图片
+  }
+
+  // 教育背景
+  formData.education = Array.from(document.querySelectorAll('#education-fields .input-entry')).map(entry => ({
+    start: entry.querySelector('input:nth-child(1)').value,
+    end: entry.querySelector('input:nth-child(2)').value,
+    school: entry.querySelector('input:nth-child(3)').value,
+    faculty: entry.querySelector('input:nth-child(4)').value,
+    major: entry.querySelector('input:nth-child(5)').value,
+    supplementary: entry.querySelector('.supplementary-info').value
+  }));
+
+  // 校园经历
+  formData.experience = Array.from(document.querySelectorAll('#experience-fields .input-entry')).map(entry => ({
+    start: entry.querySelector('input:nth-child(1)').value,
+    end: entry.querySelector('input:nth-child(2)').value,
+    organization: entry.querySelector('input:nth-child(3)').value,
+    role: entry.querySelector('input:nth-child(4)').value,
+    supplementary: entry.querySelector('.supplementary-info').value
+  }));
+
+  // 实践经历
+  formData.skills = Array.from(document.querySelectorAll('#skills-fields .input-entry')).map(entry => ({
+    start: entry.querySelector('input:nth-child(1)').value,
+    end: entry.querySelector('input:nth-child(2)').value,
+    project: entry.querySelector('input:nth-child(3)').value,
+    supplementary: entry.querySelector('.supplementary-info').value
+  }));
+
+  // 技能证书
+  formData.certificate = Array.from(document.querySelectorAll('#certificate-fields .input-entry')).map(entry => ({
+    supplementary: entry.querySelector('.supplementary-info').value
+  }));
+
+  return formData;
+}
+
+// 发送数据到后端
+async function sendDataToBackend() {
+  const formData = collectFormData();
+  const pdfFile = await generateResumePDF();
+
+  // 创建 FormData 对象
+  const data = new FormData();
+  data.append('resumeData', JSON.stringify(formData));
+  data.append('resumePDF', pdfFile, 'resume.pdf');
+
+  try {
+    const response = await fetch('https://api.example.com/submit-resume', {
+      method: 'POST',
+      body: data
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('提交成功:', result);
+    alert('简历提交成功！');
+  } catch (error) {
+    console.error('提交简历失败:', error);
+    alert('简历提交失败，请稍后重试');
+  }
+}
+
+// 绑定提交按钮
+document.querySelector('.btn-primary').addEventListener('click', sendDataToBackend);
+
+// 读取后端数据并填充到表单
+async function loadDataFromBackend() {
+  try {
+    // 假设用户的身份信息存储在 cookie 或 localStorage 中
+    const username = localStorage.getItem('userName'); // 或者从 cookie 获取
+
+    if (!username) {
+      alert('未登录，请登录后再操作');
+      return;
+    }
+
+    // 从后端获取用户数据
+    const response = await fetch(`https://api.example.com/get-user-data/${username}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const userData = await response.json();
+
+    // 填充表单
+    document.getElementById('name').value = userData.name || '';
+    document.getElementById('hometown').value = userData.hometown || '';
+    document.getElementById('birthyear').value = userData.birthyear || '';
+    document.getElementById('birthmonth').value = userData.birthmonth || '';
+    document.getElementById('birthday').value = userData.birthday || '';
+    document.getElementById('phone').value = userData.phone || '';
+    document.getElementById('email').value = userData.email || '';
+    document.getElementById('wechat').value = userData.wechat || '';
+
+    // 证件照
+    const photoPreview = document.getElementById('photoPreview');
+    if (userData.photo) {
+      photoPreview.src = userData.photo; // 假设返回的是图片的 URL
+    }
+
+    // 填充教育背景
+    const educationFields = document.querySelectorAll('#education-fields .input-entry');
+    userData.education.forEach((eduData, index) => {
+      const entry = educationFields[index];
+      if (entry) {
+        entry.querySelector('input:nth-child(1)').value = eduData.start || '';
+        entry.querySelector('input:nth-child(2)').value = eduData.end || '';
+        entry.querySelector('input:nth-child(3)').value = eduData.school || '';
+        entry.querySelector('input:nth-child(4)').value = eduData.faculty || '';
+        entry.querySelector('input:nth-child(5)').value = eduData.major || '';
+        entry.querySelector('.supplementary-info').value = eduData.supplementary || '';
+      }
+    });
+
+    // 填充校园经历
+    const experienceFields = document.querySelectorAll('#experience-fields .input-entry');
+    userData.experience.forEach((expData, index) => {
+      const entry = experienceFields[index];
+      if (entry) {
+        entry.querySelector('input:nth-child(1)').value = expData.start || '';
+        entry.querySelector('input:nth-child(2)').value = expData.end || '';
+        entry.querySelector('input:nth-child(3)').value = expData.organization || '';
+        entry.querySelector('input:nth-child(4)').value = expData.role || '';
+        entry.querySelector('.supplementary-info').value = expData.supplementary || '';
+      }
+    });
+
+    // 填充实践经历
+    const skillsFields = document.querySelectorAll('#skills-fields .input-entry');
+    userData.skills.forEach((skillData, index) => {
+      const entry = skillsFields[index];
+      if (entry) {
+        entry.querySelector('input:nth-child(1)').value = skillData.start || '';
+        entry.querySelector('input:nth-child(2)').value = skillData.end || '';
+        entry.querySelector('input:nth-child(3)').value = skillData.project || '';
+        entry.querySelector('.supplementary-info').value = skillData.supplementary || '';
+      }
+    });
+
+    // 填充技能证书
+    const certificateFields = document.querySelectorAll('#certificate-fields .input-entry');
+    userData.certificate.forEach((certData, index) => {
+      const entry = certificateFields[index];
+      if (entry) {
+        entry.querySelector('.supplementary-info').value = certData.supplementary || '';
+      }
+    });
+
+  } catch (error) {
+    console.error('获取用户数据失败:', error);
+    alert('加载用户数据失败，请稍后重试');
+  }
+}
+
+// 页面加载时自动调用
+document.addEventListener('DOMContentLoaded', loadDataFromBackend);
+
